@@ -1,0 +1,26 @@
+version: "3"
+services:
+  db:
+    image: postgres:14.2-alpine
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    command: "postgres -c 'max_connections=500'"
+    environment:
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+    ports:
+      - "5432:5432"
+  elasticsearch:
+    image: elasticsearch:7.17.8
+    environment:
+      - discovery.type=single-node
+    volumes:
+      - elasticsearch-data:/usr/share/elasticsearch/data
+    ports:
+      - 9200:9200
+    deploy:
+      resources:
+        limits:
+          memory: 1024M
+volumes:
+  postgres_data: {}
+  elasticsearch-data:
